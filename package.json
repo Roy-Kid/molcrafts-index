@@ -24,6 +24,7 @@
   "scripts": {
     "dev": "rsbuild dev",
     "build": "rsbuild build",
+    "postbuild": "tsx scripts/postbuild.ts",
     "lint": "biome check src",
     "typecheck": "tsc --noEmit",
     "preview": "rsbuild preview"
@@ -51,6 +52,9 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
+    "@fontsource/outfit": "^5.2.8",
+    "@fontsource/playfair-display": "^5.2.8",
+    "@resvg/resvg-js": "^2.6.2",
     "@rsbuild/core": "^1.2.19",
     "@rsbuild/plugin-react": "^1.1.1",
     "@types/node": "^20.14.2",
@@ -59,7 +63,9 @@
     "@types/react-syntax-highlighter": "^15.5.13",
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.38",
+    "satori": "^0.26.0",
     "tailwindcss": "^3.4.4",
+    "tsx": "^4.21.0",
     "typescript": "^5.4.5"
   }
 }
