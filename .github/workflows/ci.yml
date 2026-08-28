@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      # No lockfile is committed (see .gitignore). `npm ci` and `cache: npm`
+      # both require one and fail the job before lint runs.
+      - run: npm install
+      - run: npm run lint
+      - run: npm run typecheck

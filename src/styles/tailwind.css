@@ -1,0 +1,511 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "./brand-tokens.css";
+
+/* Re-enable v3-style class-based dark mode under v4. */
+@custom-variant dark (&:is(.dark *));
+@custom-variant force-motion (html.force-full-motion &);
+
+@theme {
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-success: hsl(var(--success));
+  --color-success-foreground: hsl(var(--success-foreground));
+  --color-success-soft: hsl(var(--success-soft));
+
+  --color-warning: hsl(var(--warning));
+  --color-warning-foreground: hsl(var(--warning-foreground));
+  --color-warning-soft: hsl(var(--warning-soft));
+
+  --color-info: hsl(var(--info));
+  --color-info-foreground: hsl(var(--info-foreground));
+  --color-info-soft: hsl(var(--info-soft));
+
+  --color-canvas: hsl(var(--canvas));
+  --color-brand-kicker: color-mix(in oklab, hsl(var(--primary)) 70%, hsl(var(--foreground)));
+  /* Homepage type roles: green keywords, blue emphasis sentences. */
+  --color-home-keyword: var(--home-keyword);
+  --color-home-emphasis: var(--home-emphasis);
+
+  /*
+   * Product-page code panel. Always dark in both themes — a code surface reads as
+   * a terminal, not as page chrome — so these are fixed values, not theme tokens.
+   */
+  --color-code-surface: #070707;
+  --color-code-chrome: #0a0a0a;
+  --color-code-well: #030303;
+  /* GitHub-flavoured panel on the Atomiverse page. */
+  --color-code-repo: #0d1117;
+
+  /* Hero subtitle sheen — a specular sweep, not a brand ramp. */
+  --color-sheen-core: rgb(255 255 255 / 0.98);
+  --color-sheen-edge: rgb(189 240 255 / 0.92);
+
+  /*
+   * Depth shadows. Black, so they read the same on every surface, and named so a
+   * page never re-derives its own rgba(0,0,0,…) literal.
+   */
+  --shadow-nav: 0 18px 50px -28px rgb(0 0 0 / 0.9);
+  --shadow-menu: 0 24px 80px -20px rgb(0 0 0 / 0.45), 0 0 0 1px rgb(var(--accent-rgb) / 0.06);
+  /* drop-shadow has its own namespace — --shadow-* would not resolve here. */
+  --drop-shadow-molecule: 0 24px 36px rgb(0 0 0 / 0.48);
+  --shadow-panel: 0 20px 40px -15px rgb(0 0 0 / 0.3);
+  --shadow-panel-lifted: 0 25px 50px -12px rgb(0 0 0 / 0.7);
+
+  /* Narrative home type stack. CJK fallbacks keep mixed-script lines on one family. */
+  --font-brand: "Geist Variable", "Noto Sans SC", "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC",
+    "Microsoft YaHei", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "DM Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei",
+    ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: var(--font-body);
+  /* Product-page faces. Every landing page shares these two. */
+  --font-outfit: "Outfit", "PingFang SC", "Hiragino Sans GB", ui-sans-serif, system-ui, sans-serif;
+  --font-playfair: "Playfair Display", ui-serif, Georgia, Cambria, serif;
+
+  /*
+   * Variable-font weights between the default 100-step ramp.
+   * Names must not collide with any --font-* family above: Tailwind resolves
+   * `font-x` against the family namespace first, which would swallow the weight.
+   */
+  --font-weight-book: 450;
+  --font-weight-label: 520;
+  --font-weight-titling: 580;
+  --font-weight-strong: 620;
+  --font-weight-wordmark: 650;
+  --font-weight-heavy: 720;
+
+  /* Leading steps the brand type needs beyond the default ramp. */
+  --leading-wordmark: 0.88;
+  --leading-wordmark-wrap: 0.94;
+  --leading-display: 1.02;
+  --leading-headline: 1.1;
+  --leading-copy: 1.4;
+  --leading-prose: 1.65;
+
+  /* Product-page display size, and the fixed small sizes used by chrome and code. */
+  --text-product-hero: 7rem;
+  --text-snippet: 15px;
+  --text-mini: 11px;
+  --text-micro: 10px;
+  --text-chip: 0.6875rem;
+  --text-note: 0.9375rem;
+
+  /* Ambient glow blurs. */
+  --blur-glow: 52px;
+  --blur-halo: 60px;
+  --blur-field: 80px;
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  /* Wordmark / brand text sweep — keep snappy (was 4s, felt sluggish). */
+  --animate-gradient-x: gradient-x 1.75s linear infinite;
+  --animate-brand-gradient: brand-gradient-x 4.5s linear infinite;
+  /* Fill drifts; a brighter sheen then crosses the letters. */
+  --animate-wordmark-drift: wordmark-drift 8s ease-in-out infinite alternate;
+  --animate-wordmark-sheen: wordmark-sheen 5.6s ease-in-out infinite;
+  --animate-molecule-morph: molecule-morph 20s ease-in-out infinite alternate;
+  --animate-molecular-pulse: molecular-pulse 15s ease-in-out infinite alternate;
+  --animate-molecule-glow: molecule-glow 3s ease-in-out infinite alternate;
+
+  /*
+   * AI editorial screen — idle life once the entrance has settled, so the screen
+   * keeps drifting instead of freezing. These run on elements *inside* the Framer
+   * entrance wrappers: a CSS animation outranks an inline style, so sharing an
+   * element would override the entrance from its first frame.
+   */
+  --animate-assist-drift: assist-drift 13s ease-in-out infinite alternate;
+  --animate-assist-drift-alt: assist-drift-alt 17s ease-in-out infinite alternate;
+  --animate-assist-node: assist-node 7s ease-in-out infinite alternate;
+  --animate-assist-sweep: assist-sweep 16s linear infinite;
+
+  /*
+   * Hero — the scroll's direction, spoken in light: a pulse that falls down a
+   * faint plumb line under the subtitle, over and over. Arrows are banned by
+   * the design contract, so gravity is carried by motion alone.
+   */
+  --animate-hero-descent: hero-descent 2.6s ease-in-out infinite;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+
+  @keyframes gradient-x {
+    0% {
+      background-position: 200% center;
+    }
+    100% {
+      background-position: -200% center;
+    }
+  }
+
+  @keyframes brand-gradient-x {
+    from {
+      background-position: 0% center;
+    }
+    to {
+      background-position: 200% center;
+    }
+  }
+
+  @keyframes wordmark-drift {
+    from {
+      background-position: 0% center;
+    }
+    to {
+      background-position: 100% center;
+    }
+  }
+
+  @keyframes wordmark-sheen {
+    0%,
+    16% {
+      background-position: 165% center;
+      opacity: 0;
+    }
+    30% {
+      opacity: 0.82;
+    }
+    48% {
+      opacity: 0.55;
+    }
+    64%,
+    100% {
+      background-position: -55% center;
+      opacity: 0;
+    }
+  }
+
+  @keyframes molecule-morph {
+    0%,
+    100% {
+      border-radius: 50%;
+      transform: translate(0, 0) scale(1) rotate(0deg);
+    }
+    25% {
+      border-radius: 65% 35% 55% 45% / 40% 60% 40% 60%;
+      transform: translate(30px, -20px) scale(0.9) rotate(90deg);
+    }
+    50% {
+      border-radius: 40% 60% 30% 70% / 60% 30% 70% 40%;
+      transform: translate(-20px, 40px) scale(1.1) rotate(180deg);
+    }
+    75% {
+      border-radius: 55% 45% 70% 30% / 45% 55% 45% 55%;
+      transform: translate(20px, 10px) scale(0.95) rotate(270deg);
+    }
+  }
+
+  @keyframes molecular-pulse {
+    from {
+      opacity: 0.02;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.05;
+      transform: scale(1.2);
+    }
+    to {
+      opacity: 0.02;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes molecule-glow {
+    from {
+      filter: drop-shadow(0 0 3px rgba(128, 255, 212, 0.3))
+        drop-shadow(0 0 5px rgba(64, 164, 223, 0.15));
+    }
+    to {
+      filter: drop-shadow(0 0 6px rgba(128, 255, 212, 0.45))
+        drop-shadow(0 0 9px rgba(64, 164, 223, 0.25));
+    }
+  }
+
+  @keyframes assist-drift {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(7px, -8px, 0);
+    }
+  }
+
+  @keyframes assist-drift-alt {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-8px, 6px, 0);
+    }
+  }
+
+  @keyframes assist-node {
+    from {
+      opacity: 0.45;
+      transform: scale(0.88);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1.18);
+    }
+  }
+
+  @keyframes assist-sweep {
+    from {
+      background-position: 0% center;
+    }
+    to {
+      background-position: 200% center;
+    }
+  }
+
+  @keyframes hero-descent {
+    0% {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    18% {
+      opacity: 1;
+    }
+    72% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(260%);
+      opacity: 0;
+    }
+  }
+}
+
+/* Restore v3 container shape (centered, 1.5rem padding, 1400px cap at 2xl). */
+@utility container {
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+  width: 100%;
+
+  @media (min-width: 1400px) {
+    max-width: 1400px;
+  }
+}
+
+/*
+ * Sponsor marks, one utility per file.
+ *
+ * A sponsor's logo ships in that sponsor's own brand colour, which would put a
+ * second palette on the page. Masking the shape and painting it with an ordinary
+ * background utility lets the mark take the page's ink and follow the theme, in
+ * light and dark alike. The url has to live here because the class is the only
+ * thing the component may carry — the file forbids inline style objects.
+ */
+@utility mask-sponsor-claude {
+  mask: url("../assets/claude.svg") center / contain no-repeat;
+  -webkit-mask: url("../assets/claude.svg") center / contain no-repeat;
+}
+
+/*
+ * UI token mapping onto shared brand anchors (./brand-tokens.css).
+ * Anchors: keep brand-tokens.css identical to zensical-theme tokens.css.
+ */
+@layer base {
+  :root {
+    --background: var(--molcrafts-cream-soft-hsl);
+    --foreground: var(--molcrafts-ink-hsl);
+    --card: 0 0% 100%;
+    --card-foreground: var(--molcrafts-ink-hsl);
+    --popover: 0 0% 100%;
+    --popover-foreground: var(--molcrafts-ink-hsl);
+    --primary: var(--molcrafts-forest-light-hsl);
+    --primary-foreground: var(--molcrafts-cream-soft-hsl);
+    --secondary: 45 35% 93%;
+    --secondary-foreground: var(--molcrafts-ink-hsl);
+    --muted: 45 25% 93%;
+    --muted-foreground: var(--molcrafts-muted-hsl);
+    --accent: 40 55% 92%;
+    --accent-foreground: var(--molcrafts-ink-hsl);
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 148 12% 86%;
+    --input: 148 12% 86%;
+    --ring: var(--molcrafts-forest-light-hsl);
+
+    --success: var(--molcrafts-forest-light-hsl);
+    --success-foreground: var(--molcrafts-forest-hsl);
+    --success-soft: 148 35% 94%;
+    --warning: var(--molcrafts-sand-strong-hsl);
+    --warning-foreground: 30 70% 24%;
+    --warning-soft: 40 70% 94%;
+    --info: 192 70% 40%;
+    --info-foreground: 192 70% 22%;
+    --info-soft: 192 50% 95%;
+
+    --canvas: var(--molcrafts-cream-hsl);
+    --radius: var(--molcrafts-radius);
+
+    --background-rgb: 251, 246, 228;
+    /*
+     * Display accent — site cyan (not Tailwind blues).
+     * #03a3d7 is the wordmark/display cyan; #1fc0f1 is spark in brand-tokens.
+     */
+    --accent-rgb: 3, 163, 215;
+
+    /*
+     * Brand ramps are identity — same in light and dark (toggle does not rewrite).
+     * Wordmark: brand cyan ramp + sweep.
+     *   #03a3d7 → #8ce4ff → #03a3d7  (historic index contract, not #3b82f6)
+     */
+    --brand-primary-from: #03a3d7;
+    --brand-primary-via: #8ce4ff;
+    --brand-primary-to: #03a3d7;
+    --brand-secondary-from: var(--molcrafts-sand-strong);
+    --brand-secondary-via: var(--molcrafts-sand);
+    --brand-secondary-to: var(--molcrafts-sand-strong);
+    --brand-display-from: var(--molcrafts-forest-light);
+    --brand-display-via: var(--molcrafts-cyan-spark);
+    --brand-display-to: var(--molcrafts-forest-light);
+    --brand-accent-from: #03a3d7;
+    --brand-accent-via: #8ce4ff;
+    --brand-accent-to: #03a3d7;
+    --brand-molrec-from: var(--molcrafts-sand-strong);
+    --brand-molrec-via: var(--molcrafts-sand);
+    --brand-molrec-to: var(--molcrafts-sand-strong);
+
+    /*
+     * AI editorial screen — light cyan display ramps. Lighter than the wordmark
+     * ramp on purpose: that screen reads as luminous context, not as the mark.
+     * Ambient glows there reuse --accent-rgb / --primary instead of their own values.
+     */
+    --brand-assist-from: #86ddf4;
+    --brand-assist-via: #c4f2ff;
+    --brand-assist-to: #61c7df;
+    --brand-assist-subject-from: #20bde9;
+    --brand-assist-subject-via: #b8f1ff;
+    --brand-assist-subject-to: #2ab6d9;
+    --brand-assist-concept: var(--molcrafts-forest-soft);
+
+    /*
+     * Homepage type roles. Light paper needs a deeper blue than display cyan
+     * so emphasis sentences and the wordmark still clear WCAG on cream.
+     */
+    --home-keyword: var(--molcrafts-forest-light);
+    --home-emphasis: #0a6f96;
+    --home-wordmark-from: #0a6f96;
+    --home-wordmark-via: #1488b3;
+  }
+
+  .dark {
+    /* Surfaces only — brand ramps / accent-rgb inherit from :root. */
+    --background: var(--molcrafts-slate-hsl);
+    --foreground: var(--molcrafts-fg-dark-hsl);
+    --card: var(--molcrafts-paper-dark-hsl);
+    --card-foreground: var(--molcrafts-fg-dark-hsl);
+    --popover: var(--molcrafts-slate-hsl);
+    --popover-foreground: var(--molcrafts-fg-dark-hsl);
+    --primary: var(--molcrafts-forest-mid-hsl);
+    --primary-foreground: var(--molcrafts-cream-soft-hsl);
+    --secondary: 130 12% 16%;
+    --secondary-foreground: var(--molcrafts-fg-dark-hsl);
+    --muted: 130 10% 15%;
+    --muted-foreground: var(--molcrafts-muted-dark-hsl);
+    --accent: 130 12% 15%;
+    --accent-foreground: var(--molcrafts-sand-hsl);
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 85.7% 97.3%;
+    --border: var(--molcrafts-border-dark-hsl);
+    --input: var(--molcrafts-border-dark-hsl);
+    --ring: var(--molcrafts-forest-mid-hsl);
+
+    --success: var(--molcrafts-forest-mid-hsl);
+    --success-foreground: 148 40% 88%;
+    --success-soft: 148 30% 14%;
+    --warning: 38 70% 52%;
+    --warning-foreground: 40 60% 88%;
+    --warning-soft: 36 40% 16%;
+    --info: 192 55% 52%;
+    --info-foreground: 192 55% 90%;
+    --info-soft: 192 35% 16%;
+
+    --canvas: 130 18% 7%;
+    --background-rgb: 16, 24, 17;
+    --home-keyword: var(--molcrafts-forest-soft);
+    --home-emphasis: rgb(var(--accent-rgb));
+    --home-wordmark-from: #03a3d7;
+    --home-wordmark-via: #8ce4ff;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply relative m-0 min-h-screen w-full max-w-full overflow-x-hidden bg-background p-0 text-foreground;
+    background-image: radial-gradient(circle at 50% 0%, hsl(var(--primary) / 0.05), transparent 70%),
+      radial-gradient(circle at 50% 100%, hsl(var(--primary) / 0.05), transparent 70%);
+  }
+
+  html {
+    @apply max-w-full overflow-x-hidden;
+    scroll-padding-top: 7rem;
+  }
+
+  /* Anchor jumps span up to seven viewport heights; only glide them for readers
+     who have not asked for less motion. */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      @apply scroll-smooth;
+    }
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply break-words text-balance;
+  }
+}
